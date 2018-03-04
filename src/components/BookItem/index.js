@@ -2,12 +2,10 @@ import React, {Component} from "react";
 import PropTypes from 'prop-types';
 
 class BookItem extends Component {
-    static propTypes = {
-        books: PropTypes.array.isRequired
-    };
 
 
     render() {
+        this.state = {books: this.props.books};
         const {books} = this.state;
         return (
             <li key={books.id}>

@@ -4,16 +4,16 @@ import {Rate} from "antd";
 import BookItem from "../BookItem";
 
 class CurrentlyReading extends Component {
-    static propTypes = {
-        books: PropTypes.array.isRequired
+
+    state =  {
+        currentlyReading: []
     };
-
     render() {
-
         const {books} = this.props;
         let currentlyReading;
         console.log(books, "currently");
         currentlyReading = books.filter(c => c.shelf === 'currentlyReading');
+        currentlyReading = this.state.currentlyReading;
         console.log(currentlyReading, "currently");
         return (
             <div className="bookshelf">
