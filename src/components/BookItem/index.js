@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 
 class BookItem extends Component {
 
-
     render() {
         this.state = {books: this.props.books};
         const {books} = this.state;
@@ -13,8 +12,7 @@ class BookItem extends Component {
                     <div className="book-top">
                         <div className="book-cover" style={{
                             width: '100%',
-                            height: '100%',
-                            backgroundImage: `url(${books.imageLinks.smallThumbnail})`
+                            height: '100%'
                         }}></div>
                         <div className="book-shelf-changer">
                             <select>

@@ -6,7 +6,9 @@ import HeaderComponent from "./components/Header";
 import {Link, Route} from "react-router-dom";
 import {Button, Tabs} from "antd";
 import Search from "./components/Search";
-import BookItem from "./components/BookItem";
+import CurrentlyReading from "./components/CurrentlyReading";
+import WantToRead from "./components/WantToRead";
+import Read from "./components/Read";
 
 const operations = <Link to="/search"><Button type="primary" shape="circle" icon="plus"/></Link>;
 const TabPane = Tabs.TabPane;
@@ -38,40 +40,14 @@ class BooksApp extends React.Component {
                         <Content>
                             <Tabs tabBarExtraContent={operations} type="card">
                                 <TabPane tab="Currently Reading" key="1">
-                                    <div className="bookshelf">
-                                        <h2 className="bookshelf-title">Currenly Reading</h2>
-                                        <div className="bookshelf-books">
-                                            <ol className="books-grid">
-                                                {this.state.books.filter(book => book.shelf === 'currentlyReading').map(book => (
-                                                    <BookItem key={book.id} books={book}/>
-                                                ))};
-                                            </ol>
-                                        </div>
-                                    </div>
+                                    <CurrentlyReading
+                                        books={this.state.books.filter((b) => b.shelf === "Currently Reading")}/>
                                 </TabPane>
                                 <TabPane tab="Want to Read" key="2">
-                                    <div className="bookshelf">
-                                        <h2 className="bookshelf-title">Want to Read</h2>
-                                        <div className="bookshelf-books">
-                                            <ol className="books-grid">
-                                                {this.state.books.filter(book => book.shelf === 'wantToRead').map(book => (
-                                                    <BookItem key={book.id} books={book}/>
-                                                ))};
-                                            </ol>
-                                        </div>
-                                    </div>
+                                    <WantToRead books={this.state.books.filter((b) => b.shelf === "Want to Read")}/>
                                 </TabPane>
                                 <TabPane tab="Read" key="3">
-                                    <div className="bookshelf">
-                                        <h2 className="bookshelf-title">Read</h2>
-                                        <div className="bookshelf-books">
-                                            <ol className="books-grid">
-                                                {this.state.books.filter(book => book.shelf === 'read').map(book => (
-                                                    <BookItem key={book.id} books={book}/>
-                                                ))};
-                                            </ol>
-                                        </div>
-                                    </div>
+                                    <Read books={this.state.books.filter((b) => b.shelf === "Read")}/>
                                 </TabPane>
                             </Tabs>
                         </Content>
