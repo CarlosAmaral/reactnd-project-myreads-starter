@@ -5,9 +5,6 @@ import * as BooksAPI from './BooksAPI'
 import HeaderComponent from "./components/Header";
 import {Link, Route} from "react-router-dom";
 import {Button, Tabs} from "antd";
-import CurrentlyReading from "./components/CurrentlyReading";
-import WantToRead from "./components/WantToRead";
-import Read from "./components/Read";
 import Search from "./components/Search";
 import BookItem from "./components/BookItem";
 
@@ -30,7 +27,6 @@ class BooksApp extends React.Component {
 
 
     render() {
-        console.log(this.state.books, "adasd");
         return (
             <div className="app">
                 <HeaderComponent/>
