@@ -4,8 +4,11 @@ import * as BooksAPI from "../../BooksAPI";
 
 class BookItem extends Component {
 
-    update = () => {
-        BooksAPI.update().then(book =>{
+    update = (bookDetails, newShelf) => {
+        const index = this.state.books.findIndex(book => book.id === bookDetails.id)
+        console.log(index, "book");
+
+        BooksAPI.update().then(book => {
 
         });
     };
@@ -13,7 +16,6 @@ class BookItem extends Component {
     render() {
         this.state = {books: this.props.books};
         const {books} = this.state;
-
         return (
             <li key={books.id}>
                 <div className="book">
@@ -24,7 +26,7 @@ class BookItem extends Component {
                             backgroundImage: `url(${books.imageLinks.smallThumbnail})`
                         }}></div>
                         <div className="book-shelf-changer">
-                            <select onChange={this.update}>
+                            <select value={books.id} onChange={this.update}>
                                 <option value="none" disabled>Move to...</option>
                                 <option defaultValue={books.shelf === 'currentlyReading'}
                                         value="currentlyReading">Currently

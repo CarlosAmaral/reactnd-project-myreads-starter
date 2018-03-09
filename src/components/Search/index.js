@@ -2,14 +2,15 @@ import React, {Component} from "react";
 import {Link} from "react-router-dom";
 import * as BooksAPI from "../../BooksAPI";
 import BookItem from "../BookItem";
-
+import escapeRegExp from 'escape-string-regexp';
 class Search extends Component {
 
     state = {
         books: []
     };
     handleSearch = (event) => {
-        const query = event.target.value;
+        let query = event.target.value;
+        query = escapeRegExp(query);
         BooksAPI.search(query).then(books => {
             this.setState({
                 books: books.map(book => {
