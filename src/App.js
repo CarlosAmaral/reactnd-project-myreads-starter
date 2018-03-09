@@ -7,6 +7,7 @@ import {Link, Route} from "react-router-dom";
 import {Button, Tabs} from "antd";
 import Search from "./components/Search";
 import BookItem from "./components/BookItem";
+import escapeRegExp from "escape-string-regexp";
 
 const operations = <Link to="/search"><Button type="primary" shape="circle" icon="plus"/></Link>;
 const TabPane = Tabs.TabPane;
@@ -14,7 +15,9 @@ const {Content} = Layout;
 
 class BooksApp extends React.Component {
     state = {
-        books: []
+        books: [],
+        queryBook: [],
+        query: ''
     };
 
     componentDidMount() {
@@ -25,14 +28,50 @@ class BooksApp extends React.Component {
         })
     }
 
+    updateShelf = (book,newShelf) => {
+        book.shelf=newShelf
+        this.setState((state) => ({
+            books: state.books.filter((b) => b.id !== book.id).concat([ book ])
+        }))
+
+        BooksAPI.update(book,newShelf)
+    };
+    userShelfBooksMatch=()=>{
+        this.state.books.forEach(book => {
+            var newSearchBooks=this.state.searchBooks.filter((b) => b.id !== book.id)
+            if(newSearchBooks && newSearchBooks<this.state.searchBooks){
+                this.setState((state) => ({
+                    searchBooks: newSearchBooks.concat([ book ])
+                }))
+            }
+        });
+    };
+    updateQuery = (query) => {
+        this.setState({ query })
+        if (query) {
+            query = escapeRegExp(query)
+            BooksAPI.search(query.trim()).then((books) => {
+                if(!books || books.error){
+                    this.setState({ searchBooks: [] })
+                }else{
+                    this.setState({ searchBooks: books})
+                    this.userShelfBooksMatch();
+                }
+            })
+        } else {
+            this.setState({ searchBooks: [] })
+        }
+    };
+
+
     render() {
-        const {books} = this.state;
+        const {books, queryBook, query} = this.state;
 
         return (
             <div className="app">
                 <HeaderComponent/>
                 <Route path="/search" exact render={() => (
-                    <Search updateBook={this.update}/>
+                    <Search books={queryBook} updateBook={this.updateShelf}  query={this.query} updateQuery={this.updateQuery}/>
                 )}/>
                 <Route path="/" exact render={() => (
                     <Layout style={{margin: '24px 16px 0', marginTop: '20px'}}>
