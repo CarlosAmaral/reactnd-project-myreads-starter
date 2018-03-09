@@ -1,7 +1,6 @@
 import React, {Component} from "react"
 import PropTypes from 'prop-types';
 import {Link} from "react-router-dom";
-import * as BooksAPI from "../../BooksAPI";
 import BookItem from "../BookItem";
 
 class Search extends Component {
@@ -12,12 +11,15 @@ class Search extends Component {
         updateQuery: PropTypes.func.isRequired
     };
 
-
+    /**
+     * Search Item
+     * @returns {*}
+     */
 
     render() {
         const {books, updateBook, updateQuery, query} = this.props;
         return (
-        
+
             <div className="search-books">
                 <div className="search-books-bar">
                     <Link className="close-search" to="/">Close</Link>
@@ -25,17 +27,19 @@ class Search extends Component {
                         <input type="text"
                                placeholder="Search by title or author" value={query}
                                onChange={(event) => updateQuery(event.target.value)}/>
-
                     </div>
                 </div>
-
                 <div className="search-books-results">
                     <div className="bookshelf">
                         <div className="bookshelf-books">
                             <ol className="books-grid">
-                                {books.map((book) => (
-                                    <BookItem key={book.id} updateBook={updateBook} book={book}/>
+                                {query && books.length > 0 && books.map((book) => (
+                                    <BookItem
+                                        key={book.id}
+                                        updateBook={updateBook}
+                                        book={book}/>
                                 ))}
+                                {(!query || books.length <= 0) && ("Books Unavailable...")}
                             </ol>
                         </div>
                     </div>

@@ -1,7 +1,7 @@
 import React from 'react'
 import {Layout, Spin} from 'antd';
 import './App.css'
-import * as BooksAPI from './BooksAPI'
+import * as BooksAPI from './utils/BooksAPI'
 import HeaderComponent from "./components/Header";
 import {Link, Route} from "react-router-dom";
 import {Button, Tabs} from "antd";
@@ -14,64 +14,81 @@ const TabPane = Tabs.TabPane;
 const {Content} = Layout;
 
 class BooksApp extends React.Component {
+
     state = {
         books: [],
-        queryBook: [],
+        searchBooks: [],
         query: ''
     };
 
     componentDidMount() {
-        BooksAPI.getAll().then((book) => {
-            this.setState({
-                books: book
-            })
+        BooksAPI.getAll().then((books) => {
+            this.setState({books})
         })
     }
 
-    updateShelf = (book,newShelf) => {
-        book.shelf=newShelf
-        this.setState((state) => ({
-            books: state.books.filter((b) => b.id !== book.id).concat([ book ])
-        }))
+    /**
+     * Update Shelf
+     * @param book
+     * @param newShelf
+     */
 
-        BooksAPI.update(book,newShelf)
+    updateShelf = (book, newShelf) => {
+        book.shelf = newShelf;
+        this.setState((state) => ({
+            books: state.books.filter((b) => b.id !== book.id).concat([book])
+        }));
+
+        BooksAPI.update(book, newShelf)
     };
-    userShelfBooksMatch=()=>{
+
+    /**
+     * Shelf Books match
+     */
+
+    shelfBooksMatch = () => {
         this.state.books.forEach(book => {
-            var newSearchBooks=this.state.searchBooks.filter((b) => b.id !== book.id)
-            if(newSearchBooks && newSearchBooks<this.state.searchBooks){
+            let newSearchBooks = this.state.searchBooks.filter((b) => b.id !== book.id);
+            if (newSearchBooks && newSearchBooks < this.state.searchBooks) {
                 this.setState((state) => ({
-                    searchBooks: newSearchBooks.concat([ book ])
+                    searchBooks: newSearchBooks.concat([book])
                 }))
             }
         });
     };
+
+    /**
+     * Update query method
+     * @param query
+     */
+
     updateQuery = (query) => {
-        this.setState({ query })
+        this.setState({query});
         if (query) {
-            query = escapeRegExp(query)
+            query = escapeRegExp(query);
             BooksAPI.search(query.trim()).then((books) => {
-                if(!books || books.error){
-                    this.setState({ searchBooks: [] })
-                }else{
-                    this.setState({ searchBooks: books})
-                    this.userShelfBooksMatch();
+                if (!books || books.error) {
+                    this.setState({searchBooks: []})
+                } else {
+                    this.setState({searchBooks: books});
+                    this.shelfBooksMatch();
                 }
             })
         } else {
-            this.setState({ searchBooks: [] })
+            this.setState({searchBooks: []})
         }
     };
 
 
     render() {
-        const {books, queryBook, query} = this.state;
+        const {books, searchBooks, query} = this.state;
 
         return (
             <div className="app">
                 <HeaderComponent/>
                 <Route path="/search" exact render={() => (
-                    <Search books={queryBook} updateBook={this.updateShelf}  query={this.query} updateQuery={this.updateQuery}/>
+                    <Search books={searchBooks} updateBook={this.updateShelf} query={query}
+                            updateQuery={this.updateQuery}/>
                 )}/>
                 <Route path="/" exact render={() => (
                     <Layout style={{margin: '24px 16px 0', marginTop: '20px'}}>
@@ -83,7 +100,7 @@ class BooksApp extends React.Component {
                                         <div className="bookshelf-books">
                                             <ol className="books-grid">
                                                 {books.filter(book => book.shelf === 'currentlyReading').map(book => (
-                                                    <BookItem key={book.id} books={book} updateBook={this.update}/>
+                                                    <BookItem key={book.id} book={book} updateBook={this.updateShelf}/>
                                                 ))};
                                             </ol>
                                         </div>
@@ -95,7 +112,7 @@ class BooksApp extends React.Component {
                                         <div className="bookshelf-books">
                                             <ol className="books-grid">
                                                 {books.filter(book => book.shelf === 'wantToRead').map(book => (
-                                                    <BookItem key={book.id} books={book} updateBook={this.update}/>
+                                                    <BookItem key={book.id} book={book} updateBook={this.updateShelf}/>
                                                 ))};
                                             </ol>
                                         </div>
@@ -107,7 +124,7 @@ class BooksApp extends React.Component {
                                         <div className="bookshelf-books">
                                             <ol className="books-grid">
                                                 {books.filter(book => book.shelf === 'read').map(book => (
-                                                    <BookItem key={book.id} books={book} updateBook={this.update}/>
+                                                    <BookItem key={book.id} book={book} updateBook={this.updateShelf}/>
                                                 ))};
                                             </ol>
                                         </div>

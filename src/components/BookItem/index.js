@@ -1,19 +1,25 @@
 import React, {Component} from "react";
 import {Rate} from "antd";
-import * as BooksAPI from "../../BooksAPI";
 import PropTypes from 'prop-types';
 
 class BookItem extends Component {
+
     static propTypes = {
-        book: PropTypes.array.isRequired,
+        book: PropTypes.object,
         updateBook: PropTypes.func.isRequired
     };
 
-    render() {
-        const {book, updateBook} = this.prop;
 
-        const image=(book.imageLinks && book.imageLinks.thumbnail?book.imageLinks.thumbnail:'')
-        const shelf=(book.shelf?book.shelf:"none")
+    /**
+     * Book Item rendering
+     * @returns {*}
+     */
+
+    render() {
+
+        const {updateBook, book} = this.props;
+        const image = (book.imageLinks && book.imageLinks.thumbnail ? book.imageLinks.thumbnail : '');
+        const shelf = (book.shelf ? book.shelf : "none");
 
         return (
             <li key={book.id}>
@@ -25,15 +31,15 @@ class BookItem extends Component {
                             backgroundImage: `url(${image})`
                         }}></div>
                         <div className="book-shelf-changer">
-                            <select value={shelf} onChange={(event) => updateBook(book,event.target.value)}>
+                            <select value={shelf} onChange={(event) => updateBook(book, event.target.value)}>
                                 <option value="none" disabled>Move to...</option>
                                 <option value="currentlyReading">Currently
                                     Reading
                                 </option>
                                 <option value="wantToRead">Want to Read
                                 </option>
-                                <option  value="read">Read</option>
-                                <option  value="none">None</option>
+                                <option value="read">Read</option>
+                                <option value="none">None</option>
                             </select>
                         </div>
                     </div>
