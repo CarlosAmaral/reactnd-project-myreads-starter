@@ -1,40 +1,32 @@
 import React, {Component} from "react";
 import {Link} from "react-router-dom";
-import {Rate} from "antd";
-import * as BooksAPI from '../../BooksAPI'
-import escapeRegExp from 'escape-string-regexp';
-import PropTypes from "prop-types";
+import * as BooksAPI from "../../BooksAPI";
 import BookItem from "../BookItem";
 
 class Search extends Component {
-    static propTypes = {
-        books: PropTypes.array.isRequired
-    };
 
     state = {
-        query: ''
+        books: []
     };
-
-
     handleSearch = (event) => {
-        const query = event.target.value
+        const query = event.target.value;
         BooksAPI.search(query).then(books => {
             this.setState({
                 books: books.map(book => {
-                    console.log(book);
                     return {
                         ...book
                     }
                 }),
                 searchField: query
             })
+            console.log(this.state.books, "sadasdas");
+
         })
     };
 
+
     render() {
-
         const {books} = this.state;
-
         return (
             <div className="search-books">
                 <div className="search-books-bar">
@@ -48,10 +40,9 @@ class Search extends Component {
                 </div>
                 <div className="search-books-results">
                     <div className="bookshelf">
-                        <h2 className="bookshelf-title">Read</h2>
                         <div className="bookshelf-books">
                             <ol className="books-grid">
-                                {this.books.map(book => (
+                                {books.map((book) => (
                                     <BookItem key={book.id} books={book}/>
                                 ))}
                             </ol>

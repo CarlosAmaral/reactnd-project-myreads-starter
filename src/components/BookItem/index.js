@@ -1,7 +1,15 @@
 import React, {Component} from "react";
 import {Rate} from "antd";
+import * as BooksAPI from "../../BooksAPI";
 
 class BookItem extends Component {
+
+    update(){
+        BooksAPI.update().then(book =>{
+
+        });
+
+    }
 
     render() {
         this.state = {books: this.props.books};
