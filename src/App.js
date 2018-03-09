@@ -14,8 +14,7 @@ const {Content} = Layout;
 
 class BooksApp extends React.Component {
     state = {
-        books: [],
-        queryParam:''
+        books: []
     };
 
     componentDidMount() {
@@ -26,33 +25,14 @@ class BooksApp extends React.Component {
         })
     }
 
-
-    searchBook = (query) => {
-        if (query === "") {
-            this.setState({
-                queryParam: []
-            })
-        } else {
-            BooksAPI.search(query).then((books) => {
-                this.setState({
-                    queryParam: books
-                })
-            })
-        }
-    };
-
-    update  = () => {
-
-    };
-
     render() {
-        const {books, queryParam} = this.state;
+        const {books} = this.state;
 
         return (
             <div className="app">
                 <HeaderComponent/>
                 <Route path="/search" exact render={() => (
-                    <Search queryParam={queryParam} bookQuery={this.searchBook} updateBook={this.update}/>
+                    <Search updateBook={this.update}/>
                 )}/>
                 <Route path="/" exact render={() => (
                     <Layout style={{margin: '24px 16px 0', marginTop: '20px'}}>

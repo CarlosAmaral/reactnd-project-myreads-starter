@@ -18,9 +18,7 @@ class Search extends Component {
                     }
                 }),
                 searchField: query
-            })
-            console.log(this.state.books, "sadasdas");
-
+            });
         })
     };
 

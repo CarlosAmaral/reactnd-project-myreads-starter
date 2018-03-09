@@ -4,12 +4,11 @@ import * as BooksAPI from "../../BooksAPI";
 
 class BookItem extends Component {
 
-    update(){
+    update = () => {
         BooksAPI.update().then(book =>{
 
         });
-
-    }
+    };
 
     render() {
         this.state = {books: this.props.books};
@@ -25,7 +24,7 @@ class BookItem extends Component {
                             backgroundImage: `url(${books.imageLinks.smallThumbnail})`
                         }}></div>
                         <div className="book-shelf-changer">
-                            <select>
+                            <select onChange={this.update}>
                                 <option value="none" disabled>Move to...</option>
                                 <option defaultValue={books.shelf === 'currentlyReading'}
                                         value="currentlyReading">Currently
@@ -36,6 +35,7 @@ class BookItem extends Component {
                                 <option defaultValue={books.shelf === 'read'} value="read">Read</option>
                                 <option defaultValue={books.shelf === ''} value="none">None</option>
                             </select>
+                            shelf {books.shelf}
                         </div>
                     </div>
 
